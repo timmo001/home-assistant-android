@@ -36,10 +36,17 @@ class ShortcutsRecyclerViewAdapter(
         val binding = ItemShortcutBinding.bind(holder.itemView)
         binding.panelText.text = panel.title_localized
         val logger = Logger.getLogger(ShortcutsRecyclerViewAdapter::class.java.name)
-        val iconName = panel.icon!!.removePrefix("mdi:").capitalize(Locale.getDefault())
-        logger.warning("TIMMO - $iconName")
-        val icon = MaterialDrawableBuilder.IconValue[iconName]
-        if (icon) binding.panelIcon.setIcon(icon)
+        if (panel.icon !== null) {
+            val iconName =
+                panel.icon!!
+                    .substring(panel.icon!!.indexOf(":" + 1))
+                    .replace("-", "_")
+                    .capitalize(Locale.getDefault())
+            logger.warning("TIMMO - $iconName")
+            val icon = MaterialDrawableBuilder.IconValue.valueOf(iconName)
+            logger.warning("TIMMO - $icon")
+            binding.panelIcon.setIcon(icon)
+        }
     }
 
     class ShortcutBindingViewHolder(

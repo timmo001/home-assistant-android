@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.homeassistant.companion.android.databinding.ItemShortcutBinding
 import io.homeassistant.companion.android.domain.integration.Panel
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder
+import java.util.*
+import java.util.logging.Logger
 
 class ShortcutsRecyclerViewAdapter(
     private val panels: List<Panel>,
@@ -27,10 +30,16 @@ class ShortcutsRecyclerViewAdapter(
         return ShortcutBindingViewHolder(binding) { onCreateShortcut(panels[it]) }
     }
 
+    @ExperimentalStdlibApi
     override fun onBindViewHolder(holder: ShortcutBindingViewHolder, position: Int) {
         val panel = panels[position]
         val binding = ItemShortcutBinding.bind(holder.itemView)
         binding.panelText.text = panel.title_localized
+        val logger = Logger.getLogger(ShortcutsRecyclerViewAdapter::class.java.name)
+        val iconName = panel.icon!!.removePrefix("mdi:").capitalize(Locale.getDefault())
+        logger.warning("TIMMO - $iconName")
+        val icon = MaterialDrawableBuilder.IconValue[iconName]
+        if (icon) binding.panelIcon.setIcon(icon)
     }
 
     class ShortcutBindingViewHolder(
